@@ -19,9 +19,19 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [err, setErr] = useState("");
   const navigate = useNavigate();
 
   const handleSignIn = async () => {
+    if (!username.trim()) {
+      setErr("Username is required");
+      return;
+    }
+    if (!password.trim()) {
+      setErr("Password is required");
+      return;
+    }
+    setErr("");
     setLoading(true);
     try {
       const result = await axios.post(
@@ -30,14 +40,15 @@ const Login = () => {
         { withCredentials: true },
       );
       console.log(result.data);
-      
+
       //  do empty input field after signUp user
       setUsername("");
       setPassword("");
 
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      setErr(error.response?.data?.message);
+      console.log(error?.response);
       setLoading(false);
     }
   };
@@ -62,7 +73,6 @@ const Login = () => {
             <img className="w-[140px]" src={logo} alt="" />
           </div>
 
-  
           <div
             onClick={() => setIsClicked({ ...isClicked, username: true })}
             className=" relative  flex items-center justify-start w-[90%] h-[50px] rounded-2xl mt-[20px] border-2 border-black"
@@ -81,6 +91,13 @@ const Login = () => {
               required
               className="h-[100%] w-[100%] rounded-2xl px-[20px] outline-none border-0"
             />
+            {username.length > 0 && username.length < 6 && (
+              <p
+                className={`text-red-700 absolute left-[20px] p-[1px] bg-white text-[12px] top-[34px] `}
+              >
+                username must be 6 character
+              </p>
+            )}
           </div>
           <div
             onClick={() => setIsClicked({ ...isClicked, password: true })}
@@ -100,6 +117,13 @@ const Login = () => {
               required
               className="h-[100%] w-[100%] rounded-2xl px-[20px] outline-none border-0"
             />
+            {password.length > 0 && password.length < 6 && (
+              <p
+                className={`text-red-700 absolute left-[20px] p-[1px] bg-white text-[12px] top-[34px] `}
+              >
+                password must be 6 character
+              </p>
+            )}
             {!showPassword ? (
               <LiaEyeSolid
                 onClick={() => setShowPassword(true)}
@@ -113,10 +137,14 @@ const Login = () => {
             )}
           </div>
 
-          <div className="w-[90%] px-4 mt-1 underline">
-            <p 
-            className=" cursor-pointer hover:text-blue-600 w-[40%]"
-            onClick={()=>navigate("/forgot-password")}>forgot password?</p>
+          <div className="w-[90%] px-1 mt-1  flex">
+            <p
+              className=" cursor-pointer underline hover:text-blue-600 w-[40%]"
+              onClick={() => navigate("/forgot-password")}
+            >
+              forgot password?
+            </p>
+            {err && <p className="text-red-600 ">{err}</p>}
           </div>
 
           <button

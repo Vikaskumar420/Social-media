@@ -7,12 +7,24 @@ import bcrypt from 'bcryptjs'
 export const signUp = async (req, res) => {
   try {
     const { name, email, username, password } = req.body;
-
-    const findByEmail = await User.findOne({ email });
-    if (findByEmail) {
+    if(name.length<3){
       return res.status(400).json({
-        success: false,
-        message: "email already exist!"
+        message:"name must be atleast 3 character!"
+      })
+    }
+     if(username.length<6){
+      return res.status(400).json({
+        message:"username must be atleast 6 character!"
+      })
+    }
+     if(email.length<13){
+      return res.status(400).json({
+        message:"enter a vailid email!"
+      })
+    }
+     if(password.length<6){
+      return res.status(400).json({
+        message:"password must be atleast 6 character!"
       })
     }
 
@@ -20,16 +32,18 @@ export const signUp = async (req, res) => {
     if (findByUserName) {
       return res.status(400).json({
         success: false,
-        message: "username already exist!"
+        message: "account already exist with this username already!"
       })
     }
 
-    if (password.length < 6) {
+    const findByEmail = await User.findOne({ email });
+    if (findByEmail) {
       return res.status(400).json({
         success: false,
-        message: "password must be atleast 8 characters!"
+        message: "account already exist with this email!"
       })
     }
+
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
@@ -68,11 +82,24 @@ export const logIn = async (req, res) => {
   try {
     const { username, password } = req.body;
 
+     if(username.length<6){
+      return res.status(400).json({
+        message:"username must be atleast 6 character!"
+      })
+    }
+    
+     if(password.length<6){
+      return res.status(400).json({
+        message:"password must be atleast 6 character!"
+      })
+    }
+
+
     const user = await User.findOne({ username });
     if (!user) {
-      return res.status(500).json({
+      return res.status(400).json({
         success: false,
-        message: "user not found!"
+        message: "username is wrong!"
       })
     }
 
@@ -80,9 +107,9 @@ export const logIn = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password)
 
     if (!isMatch) {
-      return res.status(500).json({
+      return res.status(400).json({
         success: false,
-        message: "userName or password are wrong!"
+        message: " password is wrong!"
       })
     }
 
@@ -96,11 +123,7 @@ export const logIn = async (req, res) => {
       sameSite: "Strict"
     })
 
-
-
-
-
-    return res.status(201).json({
+    res.status(201).json({
       success: true,
       message: "user login successfully!",
       user
@@ -137,23 +160,28 @@ export const logOut = async (req, res) => {
 export const sendOtp = async (req, res) => {
   try {
     const { email } = req.body;
+     if(email.length<13){
+      return res.status(400).json({
+        message:"enter a vailid mail!"
+      })
+    }
     // console.log(email);
-    
+
     // find user on the basis of email
     const user = await User.findOne({ email })
     if (!user) {
       return res.status(400).json({
         success: false,
-        message: "user not Found"
+        message: "enter a vailid mail!"
       })
     }
     // console.log(user);
-    
+
 
     // generate OTP
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
     console.log(otp);
-    
+
 
     user.resetOtp = otp;
     user.otpExpires = Date.now() + 5 * 60 * 1000;
@@ -168,7 +196,7 @@ export const sendOtp = async (req, res) => {
     })
   } catch (error) {
     console.log(error);
-    
+
     res.status(400).json({
       success: false,
       message: `sendOtp error:  ${error}`
@@ -182,6 +210,7 @@ export const sendOtp = async (req, res) => {
 export const verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
+   
     // find user on the basis of email
     const user = await User.findOne({ email })
 
@@ -193,11 +222,11 @@ export const verifyOtp = async (req, res) => {
     }
 
     if (otp.length !== 4) {
-  return res.status(400).json({
-    success: false,
-    message: "OTP must be 4 digits",
-  });
-}
+      return res.status(400).json({
+        success: false,
+        message: "OTP must be 4 digits",
+      });
+    }
 
     user.isOtpVerified = true;
     user.resetOtp = undefined;
@@ -226,6 +255,12 @@ export const resetPassword = async (req, res) => {
   try {
 
     const { email, password } = req.body;
+
+     if(password.length<6){
+      return res.status(400).json({
+        message: "password must be atleast 6 character!"
+      })
+    }
 
     // find user on the basis of email
     const user = await User.findOne({ email })

@@ -23,11 +23,34 @@ const SignUp = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userExist, setUserExist]= useState(false)
+  const [userExist, setUserExist] = useState(false);
+  const [err, setErr] = useState("");
   const navigate = useNavigate();
 
   const handleSignUp = async () => {
+    if (!name.trim()) {
+      setErr("Name is required");
+      return;
+    }
+
+    if (!username.trim()) {
+      setErr("Username is required");
+      return;
+    }
+
+    if (!email.trim()) {
+      setErr("Email is required");
+      return;
+    }
+
+    if (!password.trim()) {
+      setErr("Password is required");
+      return;
+    }
+
+    setErr("");
     setLoading(true);
+
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/signup`,
@@ -35,8 +58,8 @@ const SignUp = () => {
         { withCredentials: true },
       );
 
-      if(!result.data.success){
-        setUserExist(true)
+      if (!result.data.success) {
+        setUserExist(true);
       }
 
       //  do empty input field after signUp user
@@ -47,6 +70,7 @@ const SignUp = () => {
 
       setLoading(false);
     } catch (error) {
+      setErr(error.response?.data?.message);
       console.log(error);
       setLoading(false);
     }
@@ -191,12 +215,14 @@ const SignUp = () => {
           </div>
 
           {userExist && (
-              <p
-                className={`text-red-700 flex justify-center items-start  p-[1px] bg-white text-[12px]  `}
-              >
-                user already exist!
-              </p>
-            )}
+            <p
+              className={`text-red-700 flex justify-center items-start  p-[1px] bg-white text-[12px]  `}
+            >
+              user already exist!
+            </p>
+          )}
+
+          {err && <p className="text-red-600 mt-5 w-[90%] ">{err}</p>}
 
           <button
             onClick={handleSignUp}

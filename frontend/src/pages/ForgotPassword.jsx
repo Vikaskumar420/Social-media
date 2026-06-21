@@ -19,12 +19,18 @@ const ForgotPassword = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
   const [step, setStep] = useState(1);
 
   const navigate = useNavigate();
 
   //for step 1 (send OTP)
   const handleStep1 = async () => {
+     if (!email.trim()) {
+      setErr("Email is required");
+      return;
+    }
+    setErr("")
     setLoading(true);
     try {
       const result = await axios.post(
@@ -39,6 +45,7 @@ const ForgotPassword = () => {
       }
       setLoading(false);
     } catch (error) {
+      setErr(error?.response?.data?.message);
       console.log(error);
       setLoading(false);
     }
@@ -46,6 +53,11 @@ const ForgotPassword = () => {
 
   //for step 2 (verify OTP)
   const handleStep2 = async () => {
+     if (!otp.trim()) {
+      setErr("OTP is required");
+      return;
+    }
+    setErr("")
     setLoading(true);
     try {
       const result = await axios.post(
@@ -60,6 +72,7 @@ const ForgotPassword = () => {
       }
       setLoading(false);
     } catch (error) {
+      setErr(error?.response?.data?.message);
       console.log(error);
       setLoading(false);
     }
@@ -67,9 +80,19 @@ const ForgotPassword = () => {
 
   //for step 3 (reset password)
   const handleStep3 = async () => {
+     if (!newPassword.trim()) {
+      setErr("newPassword is required");
+      return;
+    }
+     if (!confirmNewPassword.trim()) {
+      setErr("confirmNewPassword is required");
+      return;
+    }
+    setErr("")
     setLoading(true);
     try {
       if (newPassword !== confirmNewPassword) {
+        setErr("password does not match!")
         console.log("password does not match!");
         setLoading(false);
         return;
@@ -88,6 +111,7 @@ const ForgotPassword = () => {
 
       setLoading(false);
     } catch (error) {
+      setErr(error?.response?.data?.message);
       console.log(error);
       setLoading(false);
     }
@@ -124,7 +148,15 @@ const ForgotPassword = () => {
               required
               className="h-[100%] w-[100%] rounded-2xl px-[20px] outline-none border-0"
             />
+             {email.length > 0 && email.length <13 && (
+              <p
+                className={`text-red-700 absolute left-[20px] p-[1px] bg-white text-[12px] top-[34px] `}
+              >
+                enter a vailid mail
+              </p>
+            )}
           </div>
+          {err && <p className="text-red-600 mt-5 w-[90%] ">{err}</p>}
           <button
             disabled={loading}
             onClick={handleStep1}
@@ -162,11 +194,15 @@ const ForgotPassword = () => {
               pattern="[0-9]{4}"
               className="h-[100%] w-[100%] rounded-2xl px-[20px] outline-none border-0"
             />
-            
-          </div>
-          {otp.length>0 && otp.length < 4 && (
-              <p className="text-red-500 text-sm mt-1 w-[90%] flex justify-start">OTP must be 4 digits</p>
+            {otp.length > 0 && otp.length <4 && (
+              <p
+                className={`text-red-700 absolute left-[20px] p-[1px] bg-white text-[12px] top-[34px] `}
+              >
+                otp must be 4 character
+              </p>
             )}
+          </div>
+          {err && <p className="text-red-600 mt-5 w-[90%] ">{err}</p>}
           <button
             disabled={loading}
             onClick={handleStep2}
@@ -202,6 +238,13 @@ const ForgotPassword = () => {
               required
               className="h-[100%] w-[100%] rounded-2xl px-[20px] outline-none border-0"
             />
+            {newPassword.length > 0 && newPassword.length <6 && (
+              <p
+                className={`text-red-700 absolute left-[20px] p-[1px] bg-white text-[12px] top-[34px] `}
+              >
+                newPassword must be 6 character
+              </p>
+            )}
             {!showNewPassword ? (
               <LiaEyeSolid
                 onClick={() => setShowNewPassword(true)}
@@ -234,6 +277,13 @@ const ForgotPassword = () => {
               required
               className="h-[100%] w-[100%] rounded-2xl px-[20px] outline-none border-0"
             />
+            {confirmNewPassword.length > 0 && confirmNewPassword.length <6 && (
+              <p
+                className={`text-red-700 absolute left-[20px] p-[1px] bg-white text-[12px] top-[34px] `}
+              >
+                confirmNewPassword must be 6 character
+              </p>
+            )}
             {!showConfirmNewPassword ? (
               <LiaEyeSolid
                 onClick={() => setShowConfirmNewPassword(true)}
@@ -246,6 +296,7 @@ const ForgotPassword = () => {
               />
             )}
           </div>
+          {err && <p className="text-red-600 mt-5 w-[90%] ">{err}</p>}
           <button
             disabled={loading}
             onClick={handleStep3}
