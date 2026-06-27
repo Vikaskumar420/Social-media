@@ -8,6 +8,8 @@ import axios from "axios";
 import { serverUrl } from "../App";
 import { ClipLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 
 const Login = () => {
   const [isClicked, setIsClicked] = useState({
@@ -21,6 +23,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSignIn = async () => {
     if (!username.trim()) {
@@ -39,11 +42,15 @@ const Login = () => {
         { username, password },
         { withCredentials: true },
       );
-      console.log(result.data);
+      console.log("User Logged In");
+      dispatch(setUserData(result.data));
+      console.log("User Logged In");
 
       //  do empty input field after signUp user
       setUsername("");
       setPassword("");
+      
+      navigate("/")
 
       setLoading(false);
     } catch (error) {

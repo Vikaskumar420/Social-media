@@ -1,41 +1,41 @@
 import mongoose from "mongoose";
-import User from "./User.model.js";
 
 const postSchema = new mongoose.Schema({
-    author:{
+    author: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:'User',
-        required:true
+        ref: "User",
+        required: true
     },
-    mediaType:{
+    mediaType: {
         type: String,
-        enum:["image", "video"],
-        required:true
+        enum: ["image", "video"],
+        required: true
     },
-    media:{
-        type:String,
-        required:true
-
+    media: {
+        type: String,
+        required: true
     },
     caption:{
-        type: String,
-
+        type:String
     },
     likes:[
         {
         type: mongoose.Schema.Types.ObjectId,
-        ref:'User',
+        ref: "User",
         }
     ],
-     comments:[
+    comments:[
         {
+        author:{
         type: mongoose.Schema.Types.ObjectId,
-        ref:'User',
+        ref: "User"},
+        message:{
+            type:String
+        }
         }
     ]
 
-
-},{timestamps:true})
+}, { timestamps: true })
 
 const Post = mongoose.model("Post",postSchema)
 export default Post

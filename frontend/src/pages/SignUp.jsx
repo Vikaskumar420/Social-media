@@ -8,6 +8,8 @@ import axios from "axios";
 import { serverUrl } from "../App";
 import { ClipLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 
 const SignUp = () => {
   const [isClicked, setIsClicked] = useState({
@@ -23,9 +25,9 @@ const SignUp = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userExist, setUserExist] = useState(false);
   const [err, setErr] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSignUp = async () => {
     if (!name.trim()) {
@@ -58,15 +60,14 @@ const SignUp = () => {
         { withCredentials: true },
       );
 
-      if (!result.data.success) {
-        setUserExist(true);
-      }
+      dispatch(setUserData(result.data));
 
       //  do empty input field after signUp user
       setName("");
       setUsername("");
       setEmail("");
       setPassword("");
+      navigate("/");
 
       setLoading(false);
     } catch (error) {
@@ -213,14 +214,6 @@ const SignUp = () => {
               />
             )}
           </div>
-
-          {userExist && (
-            <p
-              className={`text-red-700 flex justify-center items-start  p-[1px] bg-white text-[12px]  `}
-            >
-              user already exist!
-            </p>
-          )}
 
           {err && <p className="text-red-600 mt-5 w-[90%] ">{err}</p>}
 

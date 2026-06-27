@@ -1,9 +1,6 @@
 import mongoose from "mongoose";
-import Post from "./post.model.js";
-import Reel from "./reels.model.js";
-import Story from "./story.model.js";
 
-const UserSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -20,59 +17,66 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: true
     },
     profileImage: {
         type: String
     },
-    follwers: [
+    bio: {
+        type: String
+    },
+    profession: {
+        type: String
+    },
+    gender: {
+        type: String
+    },
+    followers: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
+            ref: "User"
         }
     ],
-
     following: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
+            ref: "User"
         }
     ],
     posts: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Post'
+            ref: "Post"
         }
     ],
-    savePosts: [
+    saved: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Post'
+            ref: "Post"
         }
     ],
-    reels: [
+    loops: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Reel'
+            ref: "Loop"
         }
     ],
     story: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:'Story'
+        ref: "Story"
     },
-    resetOtp:{
-        type:String
+
+    resetOtp: {
+        type: String
     },
-    otpExpires:{
-        type:Date
+    otpExpires: {
+        type: Date
     },
-    isOtpVerified:{
-        type:Boolean,
-        default:false
+    isOtpVerified: {
+        type: Boolean,
+        default: false
     }
+}, { timestamps: true })
 
-},
-    { timestamps: true })
-
-const User = mongoose.model("User", UserSchema);
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 export default User
