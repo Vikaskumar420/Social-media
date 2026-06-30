@@ -53,7 +53,7 @@ function Feed() {
         <Nav />
 
         {postData &&
-          postData.map((post, index) => <Post post={post} key={index} />)}
+          postData?.map((post, index) => <Post post={post} key={index} />)}
       </div>
     </div>
   );

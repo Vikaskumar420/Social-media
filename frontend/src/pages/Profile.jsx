@@ -97,7 +97,7 @@ function Profile() {
             <div className="flex relative">
               {profileData?.followers?.slice(0, 3).map((user, index) => (
                 <div
-                  className={`w-[40px] h-[40px]  border-2 border-black rounded-full cursor-pointer overflow-hidden ${index > 0 ? `absolute left-[${index * 9}px]` : ""}`}
+                  className={`w-[40px] h-[40px]  border-2 border-black rounded-full cursor-pointer overflow-hidden ${index > 0 ? `absolute left-[${index * 10}px]` : ""}`}
                 >
                   <img
                     src={user.profileImage || dp}

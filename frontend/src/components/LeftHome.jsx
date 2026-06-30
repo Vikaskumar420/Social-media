@@ -38,7 +38,7 @@ function LeftHome() {
           <FaRegHeart className="text-[white] w-[25px] h-[25px]" />
           {notificationData?.length > 0 &&
             notificationData.some((noti) => noti.isRead === false) && (
-              <div className="w-[10px] h-[10px] bg-blue-600 rounded-full absolute top-0 right-[-5px]"></div>
+              <div className="w-[10px] h-[10px] bg-red-600 rounded-full absolute top-0 right-[-5px]"></div>
             )}
         </div>
       </div>

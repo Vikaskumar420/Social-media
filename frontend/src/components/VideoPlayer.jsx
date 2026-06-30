@@ -57,9 +57,9 @@ function VideoPlayer({ media }) {
         onClick={() => setMute((prev) => !prev)}
       >
         {!mute ? (
-          <FiVolume2 className="w-[20px] h-[20px] text-white font-semibold" />
+          <FiVolume2 className="w-[20px] h-[20px] text-blue-600 font-semibold" />
         ) : (
-          <FiVolumeX className="w-[20px] h-[20px] text-white font-semibold" />
+          <FiVolumeX className="w-[20px] h-[20px] text-blue-700 font-semibold" />
         )}
       </div>
     </div>

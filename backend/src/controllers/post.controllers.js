@@ -20,7 +20,7 @@ export const uploadPost = async (req, res) => {
         const user = await User.findById(req.userId)
         user.posts.push(post._id)
         await user.save()
-        const populatedPost = await Post.findById(post._id).populate("author", "name userName profileImage")
+        const populatedPost = await Post.findById(post._id).populate("author", "name username profileImage")
         return res.status(201).json(populatedPost)
     } catch (error) {
         console.log(error);
@@ -32,8 +32,8 @@ export const uploadPost = async (req, res) => {
 export const getAllPosts = async (req, res) => {
     try {
         const posts = await Post.find({})
-            .populate("author", "name userName profileImage")
-            .populate("comments.author", "name userName profileImage").sort({ createdAt: -1 })
+            .populate("author", "name username profileImage")
+            .populate("comments.author", "name username profileImage").sort({ createdAt: -1 })
         return res.status(200).json(posts)
     } catch (error) {
         return res.status(500).json({ message: `getallpost error ${error}` })

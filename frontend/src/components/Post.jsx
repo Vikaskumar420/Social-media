@@ -22,9 +22,9 @@ function Post({ post }) {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+
   const handleLike = async () => {
-    console.log(userData);
-    
     try {
       const result = await axios.get(`${serverUrl}/api/post/like/${post._id}`, {
         withCredentials: true,
@@ -92,6 +92,7 @@ function Post({ post }) {
       socket?.off("CommentedPost");
     };
   }, [socket, postData, dispatch]);
+  
   return (
     <div className="w-[90%]   flex flex-col gap-[10px] bg-white items-center shadow-2xl shadow-[#00000058] rounded-2xl pb-[20px]">
       <div className="w-full h-[80px] flex justify-between items-center px-[10px]">

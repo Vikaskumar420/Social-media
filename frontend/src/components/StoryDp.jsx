@@ -56,7 +56,7 @@ function StoryDp({ ProfileImage, username, story }) {
   return (
     <div className="flex flex-col w-[80px]">
       <div
-        className={`w-[80px] h-[80px] ${!story ? null : !viewed ? "bg-gradient-to-b  from-blue-500 to-blue-950" : "bg-gradient-to-r from-gray-500 to-black-800"}  rounded-full flex items-center justify-center relative`}
+        className={`w-[77px] h-[77px] ${!story ? null : !viewed ? "bg-gradient-to-b  from-red-500 to-red-950" : "bg-gradient-to-r from-red-400 to-red-900"}  rounded-full flex items-center justify-center relative`}
         onClick={handleClick}
       >
         <div className="w-[70px] h-[70px] border-2 border-black rounded-full cursor-pointer overflow-hidden ">

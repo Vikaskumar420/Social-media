@@ -67,7 +67,7 @@ function EditProfile() {
         <h1 className="text-white text-[20px] font-semibold">Edit Profile</h1>
       </div>
       <div
-        className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] border-2 border-black rounded-full cursor-pointer overflow-hidden"
+        className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] border-2 border-black rounded-full cursor-pointer object-bottom overflow-hidden"
         onClick={() => imageInput.current.click()}
       >
         <input
