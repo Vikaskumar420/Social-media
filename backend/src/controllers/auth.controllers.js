@@ -1,6 +1,6 @@
 import sendMail from "../config/mail.js";
 import genToken from "../config/token.js";
-import User from "../models/User.model.js";
+import User from "../models/user.model.js";
 import bcrypt from 'bcryptjs'
 
 // create a new user
